@@ -20,7 +20,7 @@ public class GoogleApiTest {
         String response = given().log().all().queryParam("key", "qaclick123").header("Content-Type", "application/json").body(Payload.addPlace())
                 .when().post("/maps/api/place/add/json")
                 .then().log().all().assertThat().statusCode(200).body("scope", equalTo("APP"))
-                .header("server", "Apache/2.4.18 (Ubuntu)").extract().response().asString();
+                .header("server", "Apache/2.4.52 (Ubuntu)").extract().response().asString();
 
         JsonPath js = ReusableMethods.rawToJson(response);
         String placeId = js.getString("place_id");
@@ -33,7 +33,7 @@ public class GoogleApiTest {
                 "\"key\":\"qaclick123\"\n" +
                 "}")
                 .when().put("/maps/api/place/update/json")
-                .then().log().all().assertThat().statusCode(200).body("msg", equalTo("Address successfully updated"));
+                .then().log().all().assertThat().statusCode(200).body("msg", is(equalTo("Address successfully updated")));
 
         String getAddressResponse = given().log().all().queryParam("key", "qaclick123").queryParam("place_id", placeId)
                 .when().get("/maps/api/place/get/json")
