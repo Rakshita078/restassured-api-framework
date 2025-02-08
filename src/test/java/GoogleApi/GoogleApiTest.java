@@ -7,24 +7,49 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-import io.restassured.config.LogConfig;
+
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.ValidatableResponse;
-import io.restassured.specification.RequestSpecification;
-import org.apache.http.entity.mime.Header;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class GoogleApiTest {
 
     @Test
     public void testAddPlace() {
         RestAssured.baseURI = "https://rahulshettyacademy.com";
+        HashMap<String, String> nestedObject = new HashMap<>();
+        nestedObject.put("lat","-38.383494");
+        nestedObject.put("lng","33.427362");
+
+        List<String> placeTypes = new ArrayList<>();
+        placeTypes.add("shoe park");
+        placeTypes.add("shop");
+
+
+        HashMap<String,Object> mainObject = new HashMap<>();
+        mainObject.put("location",nestedObject);
+        mainObject.put("name","Frontline house");
+        mainObject.put("phone_number","(+91) 983 893 3937");
+        mainObject.put("address","29, side layout, cohen 09");
+        mainObject.put("types",placeTypes);
+        mainObject.put("website","http://google.com");
+        mainObject.put("language","French-IN");
+        mainObject.put("accuracy", 50);
+
 
         String response = given()
                 //.config(config.logConfig(LogConfig.logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))//If you don't want to use 2 times for request and response
-                .log().ifValidationFails().queryParam("key", "qaclick123").header("Content-Type", "application/json").body(Payload.addPlace())
+                .log().ifValidationFails().queryParam("key", "qaclick123").header("Content-Type", "application/json")
+                //.body(Payload.addPlace())
+                .body(mainObject)
                 .when().post("/maps/api/place/add/json")
                 .then().log().ifValidationFails().assertThat().statusCode(200).body("scope", equalTo("APP"))
                 .header("server", "Apache/2.4.52 (Ubuntu)").extract().response().asString();
@@ -46,7 +71,12 @@ public class GoogleApiTest {
         System.out.println("Server "+ extractedHeader.get("Server").getValue());
         System.out.println("Header Date "+ extractedHeader.getValue("Content-Length"));
 
-        String getAddressResponse = given().log().all().queryParam("key", "qaclick123").queryParam("place_id", placeId)
+        String getAddressResponse = given()
+                //.log().all()
+                .filter(new RequestLoggingFilter())
+                .filter(new ResponseLoggingFilter(LogDetail.BODY))
+                .queryParam("key", "qaclick123")
+                .queryParam("place_id", placeId)
                 .when().get("/maps/api/place/get/json")
                 .then().log().body().assertThat().statusCode(200).extract().response().asString();
 

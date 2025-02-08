@@ -55,11 +55,14 @@ public class ComplexJsonParse {
 //        } else {
 //            System.out.println("does not match");
 //        }
-
     }
-
 }
-
+/* Different ways to send a payload
+1. As a String
+2. As a json file
+3. As a Json Object using hashmap
+4. As a Json array using arrayList
+ */
 
 
 

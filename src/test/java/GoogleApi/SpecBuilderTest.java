@@ -13,10 +13,13 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -63,8 +66,8 @@ public class SpecBuilderTest {
 
         Response response = given().spec(req).body(p)
                 .when().post("/maps/api/place/add/json")
-                .then().spec(res).extract().response();
-        assertThat(response.path("scope"), equalTo("APP"));
+                .then().spec(res).body(matchesJsonSchema(new File("src/test/java/Utilities/jsonSchema.json"))).extract().response();
+                assertThat(response.path("scope"), equalTo("APP"));
 
     }
 }
