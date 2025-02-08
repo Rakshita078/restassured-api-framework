@@ -1,22 +1,44 @@
-package POJO_Serialize;
+package GoogleApi;
 
 import POJO_Serialize.AddPlace;
 import POJO_Serialize.Location;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SpecBuilderTest {
+    RequestSpecification req;
+    ResponseSpecification res;
+
+    @BeforeClass
+    public void beforeClass(){
+        req = new RequestSpecBuilder()
+                .setBaseUri("https://rahulshettyacademy.com")
+                .addQueryParam("key", "qaclick123")
+                .setContentType(ContentType.JSON)
+                .log(LogDetail.ALL)
+                .build();
+        res = new ResponseSpecBuilder()
+                .expectStatusCode(200)
+                .expectContentType(ContentType.JSON)
+                .log(LogDetail.ALL)
+                .build();
+
+    }
 
     @Test
     public void serialization(){
@@ -39,16 +61,10 @@ public class SpecBuilderTest {
         p.setWebsite("http://google.com");
         p.setTypes(myList);
 
-        RequestSpecification req = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addQueryParam("key", "qaclick123")
-                .setContentType(ContentType.JSON).build();
-        ResponseSpecification res = new ResponseSpecBuilder().expectStatusCode(200).expectContentType(ContentType.JSON).build();
-
-        RequestSpecification response = given().spec(req)
-                .body(p);
-             Response response1 = response.when().post("/maps/api/place/add/json")
+        Response response = given().spec(req).body(p)
+                .when().post("/maps/api/place/add/json")
                 .then().spec(res).extract().response();
-             String output = response1.asString();
-        System.out.println(output);
+        assertThat(response.path("scope"), equalTo("APP"));
 
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Surefire suite]" verbose="0">
+  <test thread-count="5" name="Surefire test(failed)" verbose="0">
+    <classes>
+      <class name="POJO_Serialize.SpecBuilderTest">
+        <methods>
+          <include name="serialization"/>
+        </methods>
+      </class> <!-- POJO_Serialize.SpecBuilderTest -->
+      <class name="POJO_Serialize.SerializeTest">
+        <methods>
+          <include name="serialization"/>
+        </methods>
+      </class> <!-- POJO_Serialize.SerializeTest -->
+      <class name="POJO_Deserialize.OAuthTest">
+        <methods>
+          <include name="testOAuth2_0"/>
+        </methods>
+      </class> <!-- POJO_Deserialize.OAuthTest -->
+    </classes>
+  </test> <!-- Surefire test(failed) -->
+</suite> <!-- Failed suite [Surefire suite] -->
