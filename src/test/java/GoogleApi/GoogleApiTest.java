@@ -2,6 +2,8 @@ package GoogleApi;
 
 import Utilities.Payload;
 import Utilities.ReusableMethods;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 
 import static io.restassured.RestAssured.*;
@@ -23,7 +25,7 @@ import java.util.List;
 public class GoogleApiTest {
 
     @Test
-    public void testAddPlace() {
+    public void testAddPlace() throws JsonProcessingException {
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         HashMap<String, String> nestedObject = new HashMap<>();
         nestedObject.put("lat","-38.383494");
@@ -44,12 +46,15 @@ public class GoogleApiTest {
         mainObject.put("language","French-IN");
         mainObject.put("accuracy", 50);
 
+        ObjectMapper objectMapper =new ObjectMapper();
+        String mainObjectStr = objectMapper.writeValueAsString(mainObject);
+
 
         String response = given()
                 //.config(config.logConfig(LogConfig.logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))//If you don't want to use 2 times for request and response
                 .log().ifValidationFails().queryParam("key", "qaclick123").header("Content-Type", "application/json")
                 //.body(Payload.addPlace())
-                .body(mainObject)
+                .body(mainObjectStr)
                 .when().post("/maps/api/place/add/json")
                 .then().log().ifValidationFails().assertThat().statusCode(200).body("scope", equalTo("APP"))
                 .header("server", "Apache/2.4.52 (Ubuntu)").extract().response().asString();
