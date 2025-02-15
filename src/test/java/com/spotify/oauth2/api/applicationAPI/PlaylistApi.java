@@ -4,14 +4,13 @@ import com.spotify.oauth2.api.RestHelper;
 import com.spotify.oauth2.pojo.Playlist;
 import io.restassured.response.Response;
 
+import static com.spotify.oauth2.api.TokenManager.getToken;
+
 public class PlaylistApi {
-
-    static String access_token = "BQBGnv1cGU6UtNHkjGR-7FWIUARqrGXWh4yYOw2LPSJ_gVcoeiszEgF4PGoEW7kVMhaYQwTIORe8khT5tIUM1TK9b6Js5M5UBJh6Iamvj7VXxsSmfez6QQZEyIuJ4r7Y8EFxqWwPNDk7fAVzhm0DoeuFV0NdLoDG5EOS7cskzih6LjYbArsqBwQwqHcSbR46hNH33FGGVK1kc1q_uueavM2irV5zf_90IVNDIwNDYDEP1zAFH4XZMIC1FaQwtQQZeMhhLw3PAlxqpVeriw7KTw1p6LPIueKEzdY8i_ukr3FMWMPR";
-
 
     public static Response postMethod(Playlist requestPlaylist) {
         return
-                RestHelper.postMethod(requestPlaylist, "/users/31ykimvasihu3exjkzvkhuli2ixq/playlists", access_token);
+                RestHelper.postMethod(requestPlaylist, "/users/31ykimvasihu3exjkzvkhuli2ixq/playlists", getToken());
     }
 
     public static Response postMethod(Playlist requestPlaylist, String token) {
@@ -21,11 +20,11 @@ public class PlaylistApi {
 
     public static Response getMethod(String playlistId) {
         return
-                RestHelper.getMethod("playlists/" + playlistId, access_token);
+                RestHelper.getMethod("playlists/" + playlistId, getToken());
     }
 
     public static Response putMethod(Playlist requestPlaylist, String playlistId) {
         return
-                RestHelper.putMethod(requestPlaylist,"playlists/" + playlistId, access_token);
+                RestHelper.putMethod(requestPlaylist,"playlists/" + playlistId, getToken());
     }
 }

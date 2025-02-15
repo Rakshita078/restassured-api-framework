@@ -18,10 +18,17 @@ public class SpecBuilder {
                .setBasePath("/v1")
                .setContentType(ContentType.JSON)
                .log(LogDetail.ALL)
-               .build()
-               .config(config().headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Authorization")));
-
+               .build();
+              // .config(config().headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Authorization")));
    }
+
+    public static RequestSpecification getAccountRequestSpec(){
+        return new RequestSpecBuilder()
+                .setBaseUri("https://accounts.spotify.com")
+                .setContentType(ContentType.URLENC)
+                .log(LogDetail.ALL)
+                .build();
+    }
 
    public static ResponseSpecification getResponseSpec(){
        return new ResponseSpecBuilder()
