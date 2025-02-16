@@ -2,6 +2,7 @@ package com.spotify.oauth2.tests;
 
 import com.spotify.oauth2.pojo.Error;
 import com.spotify.oauth2.pojo.Playlist;
+import com.spotify.oauth2.utils.DataLoader;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -11,74 +12,63 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class PlaylistTests {
 
-    @Test
-    public void createPlaylist(){
-        Playlist requestPlaylist = new Playlist()
-                .setName("Taylor Swift")
-                .setDescription("Top Taylor Swift songs")
-                .setPublic(true);
+    public Playlist playlistBuilder(String name, String description, boolean _public){
+        return Playlist.builder()
+                .name(name)
+                .description(description)
+                ._public(_public)
+                .build();
+    }
 
-        Response response = postMethod(requestPlaylist);
-        assertThat(response.statusCode(), equalTo(201));
-        Playlist responsePlaylist = response.as(Playlist.class);
+    public void assertPlaylistEqual(Playlist requestPlaylist,Playlist responsePlaylist){
         assertThat(requestPlaylist.getName(), equalTo(responsePlaylist.getName()));
         assertThat(requestPlaylist.getDescription(), equalTo(responsePlaylist.getDescription()));
-        assertThat(requestPlaylist.getPublic(),equalTo(responsePlaylist.getPublic()));
+        assertThat(requestPlaylist.get_public(),equalTo(responsePlaylist.get_public()));
+    }
+
+    public void assertError(Error responseError, int expectedStatusCode, String expectedMsg){
+        assertThat(responseError.getError().getStatus(), equalTo(expectedStatusCode));
+        assertThat(responseError.getError().getMessage(), equalTo(expectedMsg));
+    }
+
+    @Test
+    public void createPlaylist(){
+        Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
+        Response response = postMethod(requestPlaylist);
+        assertThat(response.statusCode(), equalTo(201));
+        assertPlaylistEqual(requestPlaylist,response.as(Playlist.class));
     }
 
     @Test
     public void getPlaylist(){
-        Playlist requestPlaylist = new Playlist()
-                .setName("Taylor Swift")
-                .setDescription("Top Taylor Swift songs")
-                .setPublic(true);
-
-        Response response = getMethod("67LASEfGlQjBthaGKlG5ZF");
+        Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
+        Response response = getMethod(DataLoader.getInstance().getPlaylistId());
         assertThat(response.statusCode(), equalTo(200));
-        Playlist responsePlaylist = response.as(Playlist.class);
-        assertThat(requestPlaylist.getName(), equalTo(responsePlaylist.getName()));
-        assertThat(requestPlaylist.getDescription(), equalTo(responsePlaylist.getDescription()));
-        assertThat(requestPlaylist.getPublic(),equalTo(responsePlaylist.getPublic()));
+        assertPlaylistEqual(requestPlaylist,response.as(Playlist.class));
     }
 
     @Test
     public void updatePlaylist(){
-        Playlist requestPlaylist = new Playlist()
-                .setName("Taylor Swift")
-                .setDescription("Top Taylor Swift songs")
-                .setPublic(true);
-
-        Response response = putMethod(requestPlaylist,"538lw3X2jsW0v2OJAdmTmY");
+        Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
+        Response response = putMethod(requestPlaylist, DataLoader.getInstance().updatePlaylistId());
         assertThat(response.statusCode(), equalTo(200));
     }
 
     @Test
     public void testCreatePlaylistWithoutName(){
-        Playlist requestPlaylist = new Playlist()
-                .setName("")
-                .setDescription("Updated playlist description")
-                .setPublic(true);
-
+        Playlist requestPlaylist = playlistBuilder("","Updated playlist description",true);
         Response response = postMethod(requestPlaylist);
         assertThat(response.statusCode(), equalTo(400));
-        Error error = response.as(Error.class);
-        assertThat(error.getError().getStatus(), equalTo(400));
-        assertThat(error.getError().getMessage(), equalTo("Missing required field: name"));
+        assertError(response.as(Error.class),400,"Missing required field: name");
     }
 
     @Test
     public void createPlaylistWithExpiredToken(){
         String invalidToken = "12345";
-        Playlist requestPlaylist = new Playlist()
-                .setName("Taylor Swift")
-                .setDescription("Top Taylor Swift songs")
-                .setPublic(true);
-
+        Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
         Response response = postMethod(requestPlaylist,invalidToken);
         assertThat(response.statusCode(), equalTo(401));
-        Error error = response.as(Error.class);
-        assertThat(error.getError().getStatus(), equalTo(401));
-        assertThat(error.getError().getMessage(), equalTo("Invalid access token"));
+        assertError(response.as(Error.class),401,"Invalid access token");
     }
 
 }

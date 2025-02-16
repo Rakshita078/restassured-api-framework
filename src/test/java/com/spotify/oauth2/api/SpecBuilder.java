@@ -8,6 +8,7 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
+import static com.spotify.oauth2.api.Route.BASE_PATH;
 import static io.restassured.RestAssured.config;
 
 public class SpecBuilder {
@@ -15,11 +16,11 @@ public class SpecBuilder {
     public static RequestSpecification getRequestSpec(){
        return new RequestSpecBuilder()
                .setBaseUri("https://api.spotify.com")
-               .setBasePath("/v1")
+               .setBasePath(BASE_PATH)
                .setContentType(ContentType.JSON)
                .log(LogDetail.ALL)
-               .build();
-              // .config(config().headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Authorization")));
+               .build()
+               .config(config().headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Authorization")));
    }
 
     public static RequestSpecification getAccountRequestSpec(){
