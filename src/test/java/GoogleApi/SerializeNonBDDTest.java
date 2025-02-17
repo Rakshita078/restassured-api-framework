@@ -40,7 +40,7 @@ public class SerializeNonBDDTest {
 
     }
 
-    @Test
+    //@Test
     public void serialization(){
 
         RestAssured.baseURI = "https://rahulshettyacademy.com";

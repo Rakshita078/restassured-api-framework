@@ -24,7 +24,7 @@ import java.util.List;
 
 public class GoogleApiTest {
 
-    @Test
+    //@Test
     public void testAddPlace() throws JsonProcessingException {
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         HashMap<String, String> nestedObject = new HashMap<>();

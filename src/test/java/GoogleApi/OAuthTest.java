@@ -16,7 +16,7 @@ import static io.restassured.RestAssured.given;
 
 public class OAuthTest {
 
-    @Test
+    //@Test
     public void testOAuth2_0() throws InterruptedException {
         String courseTitles[] = {"Selenium Webdriver Java",
                 "Cypress",

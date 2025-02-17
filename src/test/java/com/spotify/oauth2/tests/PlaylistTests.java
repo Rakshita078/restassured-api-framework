@@ -3,6 +3,7 @@ package com.spotify.oauth2.tests;
 import com.spotify.oauth2.pojo.Error;
 import com.spotify.oauth2.pojo.Playlist;
 import com.spotify.oauth2.utils.DataLoader;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -10,8 +11,11 @@ import static com.spotify.oauth2.api.applicationAPI.PlaylistApi.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+@Epic("Spotify Oauth 2.0")
+@Feature("Playlist API")
 public class PlaylistTests {
 
+    @Step
     public Playlist playlistBuilder(String name, String description, boolean _public){
         return Playlist.builder()
                 .name(name)
@@ -20,18 +24,25 @@ public class PlaylistTests {
                 .build();
     }
 
+    @Step
     public void assertPlaylistEqual(Playlist requestPlaylist,Playlist responsePlaylist){
         assertThat(requestPlaylist.getName(), equalTo(responsePlaylist.getName()));
         assertThat(requestPlaylist.getDescription(), equalTo(responsePlaylist.getDescription()));
         assertThat(requestPlaylist.get_public(),equalTo(responsePlaylist.get_public()));
     }
 
+    @Step
     public void assertError(Error responseError, int expectedStatusCode, String expectedMsg){
         assertThat(responseError.getError().getStatus(), equalTo(expectedStatusCode));
         assertThat(responseError.getError().getMessage(), equalTo(expectedMsg));
     }
 
-    @Test
+    @Story("Create a playlist story")
+    @Test(description = " Create a Playlist")
+    @Description("This test creates a Spotify Playlist which is public")
+    @Link(name = "Website", url = "https://dev.example.com/")
+    @Issue("AUTH-123")
+    @TmsLink("TMS-456")
     public void createPlaylist(){
         Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
         Response response = postMethod(requestPlaylist);
@@ -54,6 +65,7 @@ public class PlaylistTests {
         assertThat(response.statusCode(), equalTo(200));
     }
 
+    @Story("Create a playlist story")
     @Test
     public void testCreatePlaylistWithoutName(){
         Playlist requestPlaylist = playlistBuilder("","Updated playlist description",true);
@@ -62,6 +74,7 @@ public class PlaylistTests {
         assertError(response.as(Error.class),400,"Missing required field: name");
     }
 
+    @Story("Create a playlist story")
     @Test
     public void createPlaylistWithExpiredToken(){
         String invalidToken = "12345";

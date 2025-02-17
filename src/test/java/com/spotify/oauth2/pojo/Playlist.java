@@ -44,3 +44,5 @@ public class Playlist {
     @JsonProperty("uri")
     String uri;
 }
+
+// https://www.jsonschema2pojo.org/ Json to pojo convertor

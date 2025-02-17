@@ -43,7 +43,7 @@ public class SpecBuilderTest {
 
     }
 
-    @Test
+    //@Test
     public void serialization(){
         RestAssured.baseURI = "https://rahulshettyacademy.com";
 

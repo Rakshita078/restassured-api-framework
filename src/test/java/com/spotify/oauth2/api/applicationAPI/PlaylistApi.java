@@ -3,6 +3,7 @@ package com.spotify.oauth2.api.applicationAPI;
 import com.spotify.oauth2.api.RestHelper;
 import com.spotify.oauth2.pojo.Playlist;
 import com.spotify.oauth2.utils.ConfigLoader;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import static com.spotify.oauth2.api.Route.PLAYLISTS;
@@ -11,6 +12,7 @@ import static com.spotify.oauth2.api.TokenManager.getToken;
 
 public class PlaylistApi {
 
+    @Step
     public static Response postMethod(Playlist requestPlaylist) {
         return
                 RestHelper.postMethod(requestPlaylist, USERS+"/" + ConfigLoader.getInstance().getUserId()+PLAYLISTS, getToken());

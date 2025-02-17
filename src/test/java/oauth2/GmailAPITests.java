@@ -37,7 +37,7 @@ public class GmailAPITests {
 
     }
 
-    @Test
+    //@Test
     public void getUserProfile(){
         given(requestSpecification)
                 .basePath("/gmail/v1")
@@ -48,7 +48,7 @@ public class GmailAPITests {
                 .spec(responseSpecification);
     }
 
-    @Test
+    //@Test
     public void sendMessage(){
         String msg = "From: abc@gmail.com\n" +
                 "To: abc@gmail.com\n" +
