@@ -1,7 +1,7 @@
-package GoogleApi;
+package concepts.GoogleApi;
 
-import POJO_Serialize.AddPlace;
-import POJO_Serialize.Location;
+import concepts.POJO_Serialize.AddPlace;
+import concepts.POJO_Serialize.Location;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -19,7 +19,6 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -43,7 +42,7 @@ public class SpecBuilderTest {
 
     }
 
-    //@Test
+    @Test
     public void serialization(){
         RestAssured.baseURI = "https://rahulshettyacademy.com";
 

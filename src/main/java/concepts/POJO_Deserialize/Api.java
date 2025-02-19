@@ -1,4 +1,4 @@
-package POJO_Deserialize;
+package concepts.POJO_Deserialize;
 
 public class Api {
     private String courseTitle;

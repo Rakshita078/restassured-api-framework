@@ -1,4 +1,4 @@
-package POJO_Serialize;
+package concepts.POJO_Serialize;
 
 public class Location {
     private Double lat;

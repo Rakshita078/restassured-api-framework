@@ -1,7 +1,7 @@
-package GoogleApi;
+package concepts.GoogleApi;
 
-import POJO_Serialize.AddPlace;
-import POJO_Serialize.Location;
+import concepts.POJO_Serialize.AddPlace;
+import concepts.POJO_Serialize.Location;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -40,7 +40,7 @@ public class SerializeNonBDDTest {
 
     }
 
-    //@Test
+    @Test
     public void serialization(){
 
         RestAssured.baseURI = "https://rahulshettyacademy.com";

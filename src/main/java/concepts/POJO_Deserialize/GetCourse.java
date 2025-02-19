@@ -1,4 +1,4 @@
-package POJO_Deserialize;
+package concepts.POJO_Deserialize;
 
 public class GetCourse {
     private String url;
@@ -32,11 +32,11 @@ public class GetCourse {
         this.expertise = expertise;
     }
 
-    public POJO_Deserialize.Courses getCourses() {
+    public concepts.POJO_Deserialize.Courses getCourses() {
         return courses;
     }
 
-    public void setCourses(POJO_Deserialize.Courses courses) {
+    public void setCourses(concepts.POJO_Deserialize.Courses courses) {
         this.courses = courses;
     }
 

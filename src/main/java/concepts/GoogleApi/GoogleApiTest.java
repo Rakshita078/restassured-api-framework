@@ -1,9 +1,9 @@
-package GoogleApi;
+package concepts.GoogleApi;
 
-import Utilities.Payload;
-import Utilities.ReusableMethods;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import concepts.Utilities.ReusableMethods;
 import io.restassured.RestAssured;
 
 import static io.restassured.RestAssured.*;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class GoogleApiTest {
 
-    //@Test
+    @Test
     public void testAddPlace() throws JsonProcessingException {
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         HashMap<String, String> nestedObject = new HashMap<>();
