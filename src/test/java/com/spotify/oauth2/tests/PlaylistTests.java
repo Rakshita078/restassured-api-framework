@@ -1,5 +1,6 @@
 package com.spotify.oauth2.tests;
 
+import com.spotify.oauth2.api.StatusCode;
 import com.spotify.oauth2.pojo.Error;
 import com.spotify.oauth2.pojo.Playlist;
 import com.spotify.oauth2.utils.DataLoader;
@@ -13,7 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @Epic("Spotify Oauth 2.0")
 @Feature("Playlist API")
-public class PlaylistTests {
+public class PlaylistTests extends BaseTest {
 
     @Step
     public Playlist playlistBuilder(String name, String description, boolean _public){
@@ -32,9 +33,9 @@ public class PlaylistTests {
     }
 
     @Step
-    public void assertError(Error responseError, int expectedStatusCode, String expectedMsg){
-        assertThat(responseError.getError().getStatus(), equalTo(expectedStatusCode));
-        assertThat(responseError.getError().getMessage(), equalTo(expectedMsg));
+    public void assertError(Error responseError, StatusCode statusCode){
+        assertThat(responseError.getError().getStatus(), equalTo(statusCode.code));
+        assertThat(responseError.getError().getMessage(), equalTo(statusCode.msg));
     }
 
     @Story("Create a playlist story")
@@ -46,7 +47,7 @@ public class PlaylistTests {
     public void createPlaylist(){
         Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
         Response response = postMethod(requestPlaylist);
-        assertThat(response.statusCode(), equalTo(201));
+        assertThat(response.statusCode(), equalTo(StatusCode.CODE_201.code));
         assertPlaylistEqual(requestPlaylist,response.as(Playlist.class));
     }
 
@@ -54,7 +55,7 @@ public class PlaylistTests {
     public void getPlaylist(){
         Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
         Response response = getMethod(DataLoader.getInstance().getPlaylistId());
-        assertThat(response.statusCode(), equalTo(200));
+        assertThat(response.statusCode(), equalTo(StatusCode.CODE_200.code));
         assertPlaylistEqual(requestPlaylist,response.as(Playlist.class));
     }
 
@@ -62,7 +63,7 @@ public class PlaylistTests {
     public void updatePlaylist(){
         Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
         Response response = putMethod(requestPlaylist, DataLoader.getInstance().updatePlaylistId());
-        assertThat(response.statusCode(), equalTo(200));
+        assertThat(response.statusCode(), equalTo(StatusCode.CODE_200.code));
     }
 
     @Story("Create a playlist story")
@@ -71,7 +72,7 @@ public class PlaylistTests {
         Playlist requestPlaylist = playlistBuilder("","Updated playlist description",true);
         Response response = postMethod(requestPlaylist);
         assertThat(response.statusCode(), equalTo(400));
-        assertError(response.as(Error.class),400,"Missing required field: name");
+        assertError(response.as(Error.class),StatusCode.CODE_400);
     }
 
     @Story("Create a playlist story")
@@ -81,7 +82,7 @@ public class PlaylistTests {
         Playlist requestPlaylist = playlistBuilder("Taylor Swift","Top Taylor Swift songs",true);
         Response response = postMethod(requestPlaylist,invalidToken);
         assertThat(response.statusCode(), equalTo(401));
-        assertError(response.as(Error.class),401,"Invalid access token");
+        assertError(response.as(Error.class),StatusCode.CODE_401);
     }
 
 }

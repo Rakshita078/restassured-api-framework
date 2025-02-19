@@ -14,7 +14,10 @@ public class TokenManager {
     private static String access_token;
     private static Instant expiry_time;
 
-    public static String getToken(){
+
+//synchronized - when a thread is accessing this method and another thread is trying to access this method at the same time then it will have o wait
+    // for the 1st thread to release this method. This avoids Race condition between threads
+    public synchronized static String getToken(){
         try{
             if(access_token == null || Instant.now().isAfter(expiry_time)){
                 System.out.println("Renewing token....");

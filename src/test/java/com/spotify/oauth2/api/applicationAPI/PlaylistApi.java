@@ -12,6 +12,8 @@ import static com.spotify.oauth2.api.TokenManager.getToken;
 
 public class PlaylistApi {
 
+    //all these methods are stateless as we don't have any instance variables,which is a thumb rule for multithreading
+
     @Step
     public static Response postMethod(Playlist requestPlaylist) {
         return

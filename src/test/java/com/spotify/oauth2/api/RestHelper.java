@@ -13,7 +13,7 @@ public class RestHelper {
         return
                 given(getRequestSpec())
                         .body(requestPlaylist)
-                        .header("Authorization", "Bearer " + token)
+                        .auth().oauth2(token)
                         .when()
                         .post(path)
                         .then()
@@ -26,7 +26,7 @@ public class RestHelper {
     public static Response getMethod(String path, String token) {
         return
                 given(getRequestSpec())
-                        .header("Authorization", "Bearer " + token)
+                        .auth().oauth2(token)
                         .when()
                         .get(path)
                         .then()
@@ -39,7 +39,7 @@ public class RestHelper {
         return
                 given(getRequestSpec())
                         .body(requestPlaylist)
-                        .header("Authorization", "Bearer " + token)
+                        .auth().oauth2(token)
                         .when()
                         .put(path)
                         .then()

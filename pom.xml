@@ -30,6 +30,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
@@ -124,7 +126,6 @@
             <artifactId>allure-rest-assured</artifactId>
             <version>2.29.1</version>
         </dependency>
-
 
     </dependencies>
 
